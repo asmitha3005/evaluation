@@ -23,7 +23,7 @@ mapping = {
 
 @app.route('/')
 def home():
-    return "HOME OK"
+    return render_template('index.html')
 
 @app.route('/predict', methods=['POST'])
 def predict():
