@@ -5,7 +5,12 @@ import os
 
 app = Flask(__name__)
 
-model = joblib.load('model.joblib')
+# SAFE loading (prevents crash)
+try:
+    model = joblib.load('model.joblib')
+except Exception as e:
+    model = None
+    print("MODEL LOAD ERROR:", e)
 
 mapping = {
     'buying': {'low': 0, 'med': 1, 'high': 2, 'vhigh': 3},
@@ -23,6 +28,9 @@ def home():
 @app.route('/predict', methods=['POST'])
 def predict():
     try:
+        if model is None:
+            return "Model not loaded properly"
+
         input_data = request.form.to_dict()
 
         data = []
